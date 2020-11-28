@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
 	int fd;
 	char msg[] = "hello, world!\n";
 	long page_size, map_size;
-	char *map;
+	char *address;
 
 	fd = open(argv[1], O_RDWR|O_CREAT, 0777);
 	pwrite(fd, &msg, strlen(msg), 0);
@@ -21,8 +21,11 @@ int main(int argc, char *argv[])
 	printf("page_size: %ld\n", page_size);
 	printf("map_size: %ld\n", map_size);
 
-	map = (char*)mmap(NULL, map_size, PROT_READ, MAP_SHARED, fd, 0);
-	printf("%s: %s\n", argv[1], map);
+	address = (char*)mmap(NULL, map_size, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
+	printf("%s: %s\n", argv[1], address);
+	printf("mmap address: %p\n" , address);
+	strcpy(address, "HELLO");
+
 
 	close(fd);
 }
