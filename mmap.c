@@ -18,6 +18,10 @@ int main(int argc, char *argv[])
 
 	page_size = getpagesize();
 	map_size = (1024 / page_size + 1) * page_size;
+	/* http://softwaretechnique.jp/Linux/FS/Ext2/ext2_01.html */
+	/* (1024/4096+1)*4096=4096 */
+	/* (1024/2048+1)*2048=2048 */
+	/* (1024/1024+1)*1024=2048 */
 	printf("page_size: %ld\n", page_size);
 	printf("map_size: %ld\n", map_size);
 
