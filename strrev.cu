@@ -11,7 +11,11 @@
 
 #define INIT_BUFSIZE 4096
 
-__global__ void strrev(char *str, int size) {
+__global__ void strrev(char *str) {
+	int size = 0;
+        while (str[size] != '\0') {
+                size++;
+        }
 	for(int i=0;i<size/2;++i) {
 		char t = str[i];
 		str[i] = str[size-1-i];
@@ -31,7 +35,7 @@ int main(int argc, char *argv[])
 	fd = open(argv[1], O_RDWR);
 	pread(fd, system_buf, buf_size, 0);
 	cudaMemcpy(gpumem_buf, system_buf, buf_size, cudaMemcpyHostToDevice);
-	strrev<<<1,1>>>(gpumem_buf, strlen(system_buf));
+	strrev<<<1,1>>>(gpumem_buf);
 
 	cudaMemcpy(system_buf, gpumem_buf, buf_size, cudaMemcpyDeviceToHost);
 	printf("%s: %s\n", argv[1], system_buf);
